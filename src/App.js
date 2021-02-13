@@ -20,17 +20,20 @@ function App() {
     {
       id: 1,
       username: 'velopert',
-      email: 'public.velopert@gmail.com'
+      email: 'public.velopert@gmail.com',
+      active: true,
     },
     {
       id: 2,
       username: 'tester',
-      email: 'tester@example.com'
+      email: 'tester@example.com',
+      active: false,
     },
     {
       id: 3,
       username: 'liz',
-      email: 'liz@example.com'
+      email: 'liz@example.com',
+      active: false,
     }
   ]);
 
@@ -52,10 +55,22 @@ function App() {
   };
 
   const onRemove = id => {
-    setUsers(users.filter(user => user.id !== id));
+    setUsers(users.filter(user => user.id !== id)); // 불변성 필요
   }
 
-
+  const onToggle = id => {
+    setUsers(users.map( // 불변성 필요
+      user => user.id === id ? {...user, active: !user.active} : user // ... 불변성 필요
+    )) 
+  }
+  // 값을 등록할 때 : onCreate
+  // spread를 사용하거나, concat 함수 사용.
+  
+  // 값을 제거 할 때 : onRemove
+  // filter 함수 사용.
+  
+  // 특정 값만 업데이트 해줄 때 : onToggle
+  // map 함수 사용.
   return (
     <>
       <CreateUser
@@ -64,7 +79,7 @@ function App() {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} onRemove={onRemove} />
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
     </>
   );
 }
