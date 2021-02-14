@@ -1,6 +1,7 @@
 import React from 'react';
 
 function CreateUser({ username, email, onChange, onCreate }) {
+    console.log('CreateUser') // 리즈 누른다고 CreateUser 리랜더링 안되는거 확인함.
     return (
         <div>
             <input
@@ -20,4 +21,4 @@ function CreateUser({ username, email, onChange, onCreate }) {
     );
 }
 
-export default CreateUser;
+export default React.memo(CreateUser);

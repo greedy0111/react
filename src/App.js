@@ -49,24 +49,24 @@ function App() {
       email
     };
     // setUsers(users.concat(user));
-    setUsers([...users, user]); // 기존 배열 복사, 새로운 배열 등록 
+    setUsers(users => [...users, user]); // 기존 배열 복사, 새로운 배열 등록 
 
     setInputs({ // 초기화 버튼 클릭시 초기화
       username: '',
       email: ''
     });
     nextId.current += 1;
-  }, [username, email, users]);
+  }, [username, email]);
 
   const onRemove = useCallback(id => {
-    setUsers(users.filter(user => user.id !== id)); // 불변성 필요
-  }, [users]);
+    setUsers(users => users.filter(user => user.id !== id)); // 불변성 필요
+  }, []);
 
   const onToggle = useCallback(id => {
-    setUsers(users.map( // 불변성 필요
+    setUsers(users => users.map( // 불변성 필요
       user => user.id === id ? {...user, active: !user.active} : user // ... 불변성 필요
     )) 
-  }, [users]);
+  }, []);
   // 값을 등록할 때 : onCreate
   // spread를 사용하거나, concat 함수 사용.
   
