@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function User({ user, onRemove, onToggle}) {
     const {username, email, id, active} = user;
+    
+    useEffect(() => {
+        console.log('user 값이 설정됨.');
+        console.log(user);
+        return () => { 
+            console.log('user 값이 바뀌기 전');
+            console.log(user);
+        }
+    }, [user]); // 첨 컴포넌트가 나타날때 user가 설정되거나 제거 될때의 값을 반환
+
     return (
         <div>
             <b 

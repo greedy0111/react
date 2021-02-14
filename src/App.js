@@ -1,20 +1,24 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
+function countActiveUsers(users) {
+  console.log('활성된 사용자 수를 세는중...')
+  return users.filter(user => user.active).length; // true 값만 가져옴
+}
 function App() {
   const [inputs, setInputs] = useState({
     username: '',
     email: ''
   });
   const { username, email } = inputs; // 현재값 밖으로 빼줌
-  const onChange = e => {
+  const onChange = useCallback (e => {
     const { name, value } = e.target;
     setInputs({
       ...inputs,
       [name]: value
     });
-  };
+  }, [inputs]);
 
   const [users, setUsers] = useState([ // 컴포넌트의 상태로 관리
     {
@@ -38,7 +42,7 @@ function App() {
   ]);
 
   const nextId = useRef(4);
-  const onCreate = () => {
+  const onCreate = useCallback(() => {
     const user = {
       id: nextId.current,
       username,
@@ -52,17 +56,17 @@ function App() {
       email: ''
     });
     nextId.current += 1;
-  };
+  }, [username, email, users]);
 
-  const onRemove = id => {
+  const onRemove = useCallback(id => {
     setUsers(users.filter(user => user.id !== id)); // 불변성 필요
-  }
+  }, [users]);
 
-  const onToggle = id => {
+  const onToggle = useCallback(id => {
     setUsers(users.map( // 불변성 필요
       user => user.id === id ? {...user, active: !user.active} : user // ... 불변성 필요
     )) 
-  }
+  }, [users]);
   // 값을 등록할 때 : onCreate
   // spread를 사용하거나, concat 함수 사용.
   
@@ -71,6 +75,7 @@ function App() {
   
   // 특정 값만 업데이트 해줄 때 : onToggle
   // map 함수 사용.
+  const count = useMemo(() => countActiveUsers(users), [users]); // [users]값이 바뀌어야만 새로 연산해주겠다. 그렇지 않으면 재사용 
   return (
     <>
       <CreateUser
@@ -80,6 +85,7 @@ function App() {
         onCreate={onCreate}
       />
       <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+      <div>활성 사용자 수 : {count}</div>
     </>
   );
 }
