@@ -1,12 +1,29 @@
-import React, {useState} from 'react'; // useState 함수 부르기
+import React, {useReducer} from 'react'; // useState 함수 부르기
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'INCREMENT':
+            return state + 1;
+        case 'DECREMENT':
+            return state - 1;
+        default:
+            throw new Error('Unhandled action'); // 애러가 생긴다면 콘솔에서 확인 가능. return state 해도 됨.
+    }
+}
 
 function Counter() {
-    const [number, setNumber] = useState(2);
+    
+    const [number, dispatch] = useReducer(reducer, 0); // userReducer hook
+
     const onIncrease = () => {
-        setNumber(prevNumber => prevNumber + 1); // 함수형으로 업데이트도 가능하다.
+        dispatch({
+            type: 'INCREMENT'
+        })
     }
     const onDecrease = () => {
-        setNumber(number - 1);
+        dispatch({
+            type: 'DECREMENT'
+        })
     }
     return (
         <div>

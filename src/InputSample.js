@@ -14,6 +14,7 @@ function InputSample() {
             ...inputs,
             [name]: value,
         });
+        
     };
 
     const onReset = () => {
